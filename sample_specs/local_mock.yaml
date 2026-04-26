@@ -1,0 +1,144 @@
+openapi: "3.0.0"
+info:
+  title: JSONPlaceholder API (Local Mock)
+  version: "1.0.0"
+  description: >
+    Local mock server — no internet required.
+    Start: python mock_server.py
+    Run:   python main.py --spec sample_specs/local_mock.yaml
+
+servers:
+  - url: http://localhost:8000
+
+paths:
+  /posts:
+    get:
+      tags: [posts]
+      operationId: listPosts
+      summary: Get all posts
+      parameters:
+        - name: limit
+          in: query
+          schema: {type: integer, default: 10, example: 5}
+      responses:
+        "200": {description: Posts returned}
+    post:
+      tags: [posts]
+      operationId: createPost
+      summary: Create a new post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, body, userId]
+              properties:
+                title: {type: string, example: My Test Post}
+                body: {type: string, example: Post body content}
+                userId: {type: integer, example: 1}
+      responses:
+        "201": {description: Created}
+        "400": {description: Invalid input}
+  /posts/{id}:
+    get:
+      tags: [posts]
+      operationId: getPostById
+      summary: Get a single post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer, example: 2}
+      responses:
+        "200": {description: Post returned}
+        "404": {description: Not found}
+    put:
+      tags: [posts]
+      operationId: updatePost
+      summary: Update a post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer, example: 3}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, body, userId]
+              properties:
+                title: {type: string, example: Updated Title}
+                body: {type: string, example: Updated content}
+                userId: {type: integer, example: 1}
+      responses:
+        "200": {description: Updated}
+        "404": {description: Not found}
+    patch:
+      tags: [posts]
+      operationId: patchPost
+      summary: Partially update a post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer, example: 4}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: {type: string, example: Patched Title}
+      responses:
+        "200": {description: Patched}
+        "404": {description: Not found}
+    delete:
+      tags: [posts]
+      operationId: deletePost
+      summary: Delete a post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer, example: 5}
+      responses:
+        "200": {description: Deleted}
+        "404": {description: Not found}
+  /users:
+    get:
+      tags: [users]
+      operationId: listUsers
+      summary: Get all users
+      parameters:
+        - name: limit
+          in: query
+          schema: {type: integer, default: 10, example: 3}
+      responses:
+        "200": {description: Users returned}
+  /users/{id}:
+    get:
+      tags: [users]
+      operationId: getUserById
+      summary: Get a user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer, example: 1}
+      responses:
+        "200": {description: User returned}
+        "404": {description: Not found}
+  /comments:
+    get:
+      tags: [comments]
+      operationId: listComments
+      summary: Get all comments
+      parameters:
+        - name: postId
+          in: query
+          schema: {type: integer, example: 1}
+      responses:
+        "200": {description: Comments returned}
